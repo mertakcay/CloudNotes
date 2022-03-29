@@ -26,3 +26,31 @@ Strongly Consistant Read : Veri replicate edilirken bu veri doğru olucak garant
 1. Exponential back-off SDK içindeymiş
 2. Distribute partitions keys 
 3. DAX kullan
+
+## DynamoDB Partitions
+- Her partitions boundry e sahip ve 3000RCU/ 1000WCU max capacity, max 10GB
+## DynamoDB Batch
+- 25 tane ***PutItem veya DeleteItem*** yapılabilir
+- 16mB kadar veri yazabilir her bir veri 400kB kadar olabilir
+- Request sayısını azaltmak için aktif kullanılır paralel olarak delete ve write işlemi gerçekleştiği için tıkanma yaratmaz.
+- 100 item'a kadar ve 16 mB itema kadar batch olarak ***get*** edebilir.
+- Paralellik devamke
+- ***Query için*** 1mB kadar sorgu atılabilir ve fazlası varsa paging kullan
+- ***Scan için*** oldukça boktan bir tercih fakat gerekirse bil yinede tüm tabloya bakarak ilgili filtre var mı kontrol eder RCU nun içinden geçer 1mB kadar kullanım sağlar ve fazlası varsa paging kullan. Paralel olarak multi partition kullanabilirsin bir nebze darboğazdan kurtarır.***Hive ile ortaklaşa kullanmayı sever ***
+
+## DynamoDB Indexes
+### LSI
+- Tablo yaratılırken oluşturulmak zorunda 
+### GSI
+
+## DynamoDB DAX
+- DynamoDB' yi cache'lemek için kullanılır. Çok fazla read olma durumunda aktif olarak kullanılır.
+- Her bir DAX cluster da 10 tane node bulunur ve 5 dakikaya kadar yaşayabilir 3 tane tavsiye edilir.
+- Encrption olarak KMS, VPC, IAM, CloudTrail etc
+## DynamoDB Streams
+- Elimizdeki tüm tabloları live hale getirmeye yarar
+- Direkt olarak kullanılmaz live hale gelirken KCL Lib veya Lambda ile Kinesis Adapter kullanılır.(Yine ve veyalara boğulmuş bir cümle KCL lib veya lambdadan birini seç ucuna Kinesis adapter tak) Kafkadaki producer-consumer mantığı tarzında işaretlenir.
+- Genellikle elasticSearch ile tercih edilir.
+- Production ortamında cross-region kullanmak teerrrcih sebebi olabilir. Farklı region tepki süresi etc.
+- Kinesis te 24H retention süresi var 
+- Batch size 1k Row 6mB kadar saklayabilir
