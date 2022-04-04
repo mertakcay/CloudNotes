@@ -54,3 +54,21 @@ Strongly Consistant Read : Veri replicate edilirken bu veri doğru olucak garant
 - Production ortamında cross-region kullanmak teerrrcih sebebi olabilir. Farklı region tepki süresi etc.
 - Kinesis te 24H retention süresi var 
 - Batch size 1k Row 6mB kadar saklayabilir
+
+## DynamoDB TTL
+- WCU veya RCU yemez ve bunu background serviceleri düzenler ek bir maliyeti yoktur
+- Genellikle 48 saatte yok olur, yok olduktan sonra serivce 24 saat içinde geri getirme özelliğine sahiptir.
+
+## DynamoDB Security & Other Feature
+- VPC ile bağlantı kurulabilir
+- IAM ile yetkilendirilebilir
+- KMS / SSL / TLS ile encryption var.
+- ***Backup ve Restore*** Zaman kaybı olmadan direkt olarak restore edilebilir
+- ***Global Tablolarla** multi-region, fully replicated ve yüksek performanslı tablo tutumu gerçekleştirilebilir.
+- *** AWS Migration service ile neredeyse tüm dbleri -MySQL dahil- dynamodbye migrate edebiliyoruz.
+
+## DynamoDB Large Object Storing
+
+- DynamoDb de her bir dosya 400kb olduğu için daha büyük objeleri saklamak için AWS S3 ye yüklenip adresi dynamoDB ye referans gösterilir.
+
+- Bunun yanında ***az ulaşılan*** dosyalar var ise bunu AWS S3' e saklayıp adresini dynamoDB ye refere ederiz çünkü, DynamoDB her bir okuma yazma durumunda WCU ve RCU costu ortaya çıkartıcaktır buda büyük dosyalarda oldukça fazla olduğu için maliyeti x10 arttıracaktır.
