@@ -1,1 +1,2 @@
-﻿# AWS Cloud Notları - Tekrar
+# AWS Cloud 
+- Teknik anlamda önemli gördüğüm yerileri not aldığım repo
